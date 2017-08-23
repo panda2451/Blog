@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我们的主页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.4.3.min.js"></script>
+</head>
+<body id="page">
+<aside >
+    <nav >
+        <div class="logo">
+            <span>A PORTFOLIO OF</span>
+            JOEFREY MAHUSAY
+        </div>
+        <ul>
+            <li class="active"><a href="home.html">HOME</a></li>
+            <li><a href="video.html">WORK</a></li>
+            <li ><a href="about.html">ABOUT</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+        <div class="bg_bottom"></div>
+    </nav>
+</aside>
+<div id="main-content">
+    <section class="ribbon">
+    </section>
+    <section class="ps_container banner" id="b05">
+        <div class="ps_image_wrapper">
+            <ul id="banner_list">
+                <li><img src="images/1.jpg" alt=""></li>
+                <li><img src="images/2.jpg" alt=""></li>
+                <li><img src="images/3.jpg" alt=""></li>
+                <li><img src="images/4.jpg" alt=""></li>
+                <li><img src="images/5.jpg" alt=""></li>
+            </ul>
+        </div>
+        <div class="ps_prev"></div>
+        <div class="ps_next"></div>
+        <ul class="ps_nav" id="banner">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+        </ul>
+    </section>
+    <section class="divider">
+        <section class="intro-text"><h2>I MAKE BEAUTIFUL WEBSITES</h2></section>
+    </section>
+    <h3>MY RECENT WORK</h3>
+    <div class="columns">
+        <div class="two-column">
+            <img src="images/work_1.jpg" alt="">
+        </div>
+        <div class="three-column">
+            <img src="images/work_2.jpg" alt="">
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    var t = n = 0, count;
+    $(document).ready(function () {
+        count = $("#banner_list li").length;
+        $("#banner_list li:not(:first-child)").hide();
+        $("#banner li a").click(function () {
+            var i = $(this).text() - 1;//获取li元素内的值
+            n = i;
+            if (i >= count) return;
+            $("#banner_list li").eq(i).find("img").attr('alt');
+            $("#banner_list li").filter(":visible").fadeOut(500).parent().children().eq(i).fadeIn(1000);
+            document.getElementById("banner").style.background = "";
+            $(this).toggleClass("on");
+            $(this).siblings().removeAttr("class");
+        });
+        t = setInterval("showAuto()", 3000);
+        $("#banner_list li").hover(function () {
+            clearInterval(t)
+        }, function () {
+            t = setInterval("showAuto()", 3000);
+        });
+        $(".ps_prev").click(function () {//引用两个class
+            var i=--n;
+            $("#banner_list li").eq(i).find("img").attr('alt');
+            $("#banner_list li").filter(":visible").fadeOut(500).parent().children().eq(i).fadeIn(1000)
+        })
+        $(".ps_next").click(function () {
+            var i=++n;
+            $("#banner_list li").eq(i).find("img").attr('alt');
+            $("#banner_list li").filter(":visible").fadeOut(500).parent().children().eq(i).fadeIn(1000)
+        })
+    });
+    function showAuto() {//判定
+        n = n >= (count - 1) ? 0 : ++n;
+        $("#banner li a").eq(n).trigger('click');
+    }
+
+</script>
+</body>
+</html>

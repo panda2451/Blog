@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的视频页</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div style="margin: 0 auto;overflow: hidden;text-align: center">
+    <canvas id="mycanvas" width="1000px" style="text-align: center">我的视频</canvas>
+</div>
+
+<div style="width: 600px;height: 379px;margin: 0 auto;background-size: 100% 100%;margin-bottom: 10px" >
+    <video width="900" height="300" style="float: left;margin-left: -200px" src="video/iceage4.mp4" poster="images/iceage3.jpg">
+    </video>
+</div>
+<div id="video_controller" style="width: 800px;height: 379px;margin: 20px auto">
+    <button style="float: left" id="btn_play" class="btn btn-primary"> 播放</button>
+    <button style="float: left;margin-left: 20px" id="btn_pause"  class="btn btn-primary"> 暂停</button>
+    <input onclick="ChangeProgress(this)" style="float: left;width: 300px;margin-left: 20px" min="0" value="0"  type="range" id="playgress">
+    <span style="float: left;margin-left: 20px"><span id="currenttime"></span>/ <span id="alltime"></span></span>
+    <button style="float: left;margin-left: 20px" id="btn_mute"  class="btn btn-primary"> 音量</button>
+    <input  style="width: 100px;float: left;margin-left: 10px" type="range" min="0" max="1" step="0.1" id="volume">
+</div>
+
+<script type="text/javascript">
+    function showStrokeText() {
+        var canvas = document.getElementById('mycanvas');
+        var context = canvas.getContext('2d');
+        context.strokeStyle = "green";
+        context.font = '40px san-serif';
+        context.textBaseline = 'bottom';
+        context.strokeText('冰河世纪', 300, 100);
+    }
+
+    var video;
+    window.onload = function () {
+        video = document.getElementsByTagName("video")[0];
+        var btn_play = document.getElementById("btn_play");
+        var btn_pause = document.getElementById("btn_pause");
+        var btn_mute = document.getElementById("btn_mute");
+        var btn_volume = document.getElementById('volume');
+        btn_play.addEventListener('click', doPlay, false);
+        btn_pause.addEventListener('click', doPause, false);
+        btn_mute.addEventListener('click', doMute, false);
+        btn_volume.value = video.volume;
+        btn_volume.addEventListener('change', function (e) {
+            myVol = e.target.value;
+            video.volume = myVol;
+            if (myVol == 0) {
+                video.muted = true;
+            } else {
+                video.muted = false;
+            }
+            return false;
+        }, true);
+        setInterval(this.setprogress,500);//����������
+        this.doPlay();
+        this.showStrokeText();
+    };
+    function doPlay() {
+        if (video.paused) {
+            video.play();
+        } else if (video.ended) {
+            video.currentTime = 0;
+            video.play();
+        }
+        ;
+    }
+    ;
+    function doPause() {
+        if (video.play) {
+            video.pause();
+        }
+        ;
+    };
+    function doMute() {
+        document.getElementById('volume').value = 0;
+        video.muted = true;
+    };
+    function setprogress(){
+        var MM,SS,
+            currentTime=video.currentTime, //��ȡ��ǰ�ĸ�����ʱ��
+            totalTime=video.duration;//��ȡ��ǰ�ĸ�������ʱ��
+        MM=parseInt(currentTime/60);
+        SS=parseInt(currentTime%60);
+        document.getElementById('currenttime').innerHTML=MM+':'+(SS<10?'0'+SS:SS);//��ʾ����ʱ��
+        MM=parseInt(totalTime/60);
+        SS=parseInt(totalTime%60);
+        document.getElementById('alltime').innerHTML=MM+':'+(SS<10?'0'+SS:SS);
+        document.getElementById('playgress').value=currentTime/totalTime*100;
+    };
+    //�ı䲥�Ž���
+    function ChangeProgress(val){
+        video.currentTime=val.value/100*video.duration;
+    };
+</script>
+</body>
+</html>
